@@ -15,7 +15,7 @@ namespace Coree.DotnetTool.ToolKit
     public class Program
     {
         public static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        public static int ExitCode = 0;
+        public static int ExitCode = -1;
 
         public static async Task<int> Main(string[] args)
         {
