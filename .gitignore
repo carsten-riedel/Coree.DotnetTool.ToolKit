@@ -1,0 +1,7 @@
+.vs/**/*
+Coree.DotnetTool.ToolKit/.vs/**/*
+Coree.DotnetTool.ToolKit/bin/**/*
+Coree.DotnetTool.ToolKit/obj/**/*
+Coree.DotnetTool.ToolKit.MSTest/.vs/**/*
+Coree.DotnetTool.ToolKit.MSTest/bin/**/*
+Coree.DotnetTool.ToolKit.MSTest/obj/**/*

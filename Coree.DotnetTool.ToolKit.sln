@@ -1,0 +1,26 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coree.DotnetTool.ToolKit", "Coree.DotnetTool.ToolKit\Coree.DotnetTool.ToolKit.csproj", "{FDE6542E-4D43-465F-B15B-54C657C88028}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDE6542E-4D43-465F-B15B-54C657C88028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE6542E-4D43-465F-B15B-54C657C88028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE6542E-4D43-465F-B15B-54C657C88028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE6542E-4D43-465F-B15B-54C657C88028}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8A8EEFA7-BADB-4CFF-AB4B-AA5A6D3C31BC}
+	EndGlobalSection
+	GlobalSection(SolutionNotes) = postSolution
+	EndGlobalSection
+EndGlobal
