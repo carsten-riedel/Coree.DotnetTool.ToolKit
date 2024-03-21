@@ -2,7 +2,7 @@
   "profiles": {
     "Coree.DotnetTool.ToolKit": {
       "commandName": "Project",
-      "commandLineArgs": "hello master -s Hellos"
+      "commandLineArgs": "CommandExists \"cUrl\""
     }
   }
 }

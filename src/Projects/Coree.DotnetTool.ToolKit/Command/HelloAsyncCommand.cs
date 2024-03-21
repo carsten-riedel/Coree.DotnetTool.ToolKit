@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Coree.DotnetTool.ToolKit
+namespace Coree.DotnetTool.ToolKit.Command
 {
     public class HelloAsyncCommand : AsyncCommand<HelloAsyncCommand.OnBranchCopyDirectorySettings>
     {
@@ -36,7 +30,7 @@ namespace Coree.DotnetTool.ToolKit
 
             public override ValidationResult Validate()
             {
-                
+
                 if (HostPrefix == "Hello")
                 {
                     return ValidationResult.Error("Required argument cannot be 'Hello'");

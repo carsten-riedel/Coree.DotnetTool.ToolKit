@@ -1,14 +1,13 @@
 using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Spectre.Console;
-using Spectre.Console.Cli;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using Coree.DotnetTool.ToolKit.Command;
+using Coree.NETStandard.Extensions;
+using Coree.NETStandard.Logging;
+using Coree.NETStandard.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System.Diagnostics;
+using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit
 {
@@ -20,30 +19,31 @@ namespace Coree.DotnetTool.ToolKit
         public static async Task<int> Main(string[] args)
         {
             Console.CancelKeyPress += (object? sender, ConsoleCancelEventArgs e) =>
-            {
-                var isCtrlC = e.SpecialKey == ConsoleSpecialKey.ControlC;
-                var isCtrlBreak = e.SpecialKey == ConsoleSpecialKey.ControlBreak;
-
-                if (isCtrlC || isCtrlBreak)
                 {
-                    cancellationTokenSource.Cancel();
-                    Environment.Exit(ExitCode);
-                }
-            };
+                    var isCtrlC = e.SpecialKey == ConsoleSpecialKey.ControlC;
+                    var isCtrlBreak = e.SpecialKey == ConsoleSpecialKey.ControlBreak;
+
+                    if (isCtrlC || isCtrlBreak)
+                    {
+                        cancellationTokenSource.Cancel();
+                        Environment.Exit(ExitCode);
+                    }
+                };
 
             ServiceCollection services = new ServiceCollection();
 
             services.AddLogging(configure =>
                 configure.AddSerilog(new LoggerConfiguration()
-                    .Enrich.With(new SourceContextShortEnricher())
                     .Enrich.FromLogContext()
+                    .Enrich.With(new SourceContextShortEnricher())
                     .MinimumLevel.Verbose()
-                    .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss.ffff} | {Level:u3} | {SourceContextShort} | {Message:l}{NewLine}{Exception}")
+                    .WriteTo.Console(outputTemplate: SerilogExtensions.SimpleOutputTemplate())
                     .CreateLogger()
                 )
             );
 
             services.AddSingleton<ILoggingService, ConsoleLoggingService>();
+            services.AddSingleton<IFileService, FileService>();
 
             var registrar = new TypeRegistrar(services);
 
@@ -53,8 +53,7 @@ namespace Coree.DotnetTool.ToolKit
             app.Configure(config =>
             {
                 config.SetApplicationName("toolkit");
-                config.AddCommand<HelloAsyncCommand>("hello");
-                config.AddCommand<HelloAsyncCommand>("hellox");
+                config.AddCommand<CommandExistsAsyncCommand>("CommandExists");
             });
 
             return await app.RunAsync(args);
