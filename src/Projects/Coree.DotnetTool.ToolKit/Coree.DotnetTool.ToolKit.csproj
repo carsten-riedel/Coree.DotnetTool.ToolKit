@@ -26,13 +26,11 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="Command\CommandExistsAsyncCommand.cs" />
-    <None Remove="ConsoleLoggingService.cs" />
     <None Remove="HelloAsyncCommand.cs" />
-    <None Remove="TypeRegistrar.cs" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Coree.NETStandard" Version="0.1.8847.12153" />
+    <PackageReference Include="Coree.NETStandard" Version="0.1.8847.13671" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
