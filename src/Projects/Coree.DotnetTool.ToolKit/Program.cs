@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Coree.DotnetTool.ToolKit.Command;
 using Coree.NETStandard.Extensions;
 using Coree.NETStandard.Logging;
-using Coree.NETStandard.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
@@ -46,7 +45,7 @@ namespace Coree.DotnetTool.ToolKit
             );
 
             services.AddSingleton<ILoggingService, ConsoleLoggingService>();
-            services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<Coree.NETStandard.Services.FileService.IFileService, Coree.NETStandard.Services.FileService.FileService>();
             services.AddSingleton<LoggingLevelSwitch>(levelSwitch);
 
             var registrar = new TypeRegistrar(services);

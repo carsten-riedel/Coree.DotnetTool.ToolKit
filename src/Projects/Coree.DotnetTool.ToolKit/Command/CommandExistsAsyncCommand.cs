@@ -2,11 +2,10 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Coree.NETStandard.Services;
+using Coree.NETStandard.Services.FileService;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Serilog.Events;
-
 using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit.Command
@@ -19,7 +18,7 @@ namespace Coree.DotnetTool.ToolKit.Command
             [CommandArgument(0, "<CommandName>")]
             public string? CommandName { get; init; }
 
-            [Description("Minimum loglevel Verbose,Debug,Information,Warning,Error,Fatal")]
+            [Description("Minimum loglevel, valid values => Verbose,Debug,Information,Warning,Error,Fatal")]
             [DefaultValue(LogEventLevel.Information)]
             [CommandOption("-l|--loglevel")]
             public LogEventLevel LogEventLevel { get; init; }
@@ -28,14 +27,13 @@ namespace Coree.DotnetTool.ToolKit.Command
             [DefaultValue(false)]
             [CommandOption("-t|--throwError")]
             public bool ThrowError { get; init; }
-
         }
 
         private readonly ILogger<CommandExistsAsyncCommand> logger;
         private readonly IFileService fileService;
         private readonly LoggingLevelSwitch loggingLevelSwitch;
 
-        public CommandExistsAsyncCommand(ILogger<CommandExistsAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, IFileService fileService)
+        public CommandExistsAsyncCommand(ILogger<CommandExistsAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, Coree.NETStandard.Services.FileService.IFileService fileService)
         {
             this.logger = logger;
             this.fileService = fileService;
@@ -45,15 +43,14 @@ namespace Coree.DotnetTool.ToolKit.Command
         public override async Task<int> ExecuteAsync(CommandContext context, CommandExistsSettings settings)
         {
             loggingLevelSwitch.MinimumLevel = Serilog.Events.LogEventLevel.Information;
-            Program.ExitCode = await ExecuteCancelAsync(Program.cancellationTokenSource.Token, settings);
-            return Program.ExitCode;
+            return await ExecuteCancelAsync(settings,Program.cancellationTokenSource.Token);
         }
 
-        private async Task<int> ExecuteCancelAsync(CancellationToken cancellationToken, CommandExistsSettings settings)
+        private async Task<int> ExecuteCancelAsync(CommandExistsSettings settings,CancellationToken cancellationToken)
         {
             try
             {
-                var foundat = fileService.IsCommandAvailable(settings.CommandName);
+                var foundat = await fileService.IsCommandAvailableAsync(settings.CommandName);
                 if (settings.ThrowError && foundat ==null)
                 {
                     logger.LogError("Command {CommandName} not found. Throwing error exitcode.", settings.CommandName);
@@ -81,8 +78,7 @@ namespace Coree.DotnetTool.ToolKit.Command
                 return -2;
             }
 
-            return 0;
-            // Cleanup or final actions can also be placed here if they should be executed regardless of cancellation
+
         }
     }
 }

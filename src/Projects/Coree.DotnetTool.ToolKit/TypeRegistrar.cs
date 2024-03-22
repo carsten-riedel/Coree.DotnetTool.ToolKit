@@ -35,11 +35,7 @@ namespace Coree.DotnetTool.ToolKit
 
         public void RegisterLazy(Type service, Func<object> func)
         {
-            if (func is null)
-            {
-                throw new ArgumentNullException(nameof(func));
-            }
-
+            ArgumentNullException.ThrowIfNull(func);
             services.AddSingleton(service, (provider) => func());
         }
     }
@@ -53,7 +49,7 @@ namespace Coree.DotnetTool.ToolKit
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
-        public object Resolve(Type type)
+        public object? Resolve(Type? type)
         {
             if (type == null)
             {

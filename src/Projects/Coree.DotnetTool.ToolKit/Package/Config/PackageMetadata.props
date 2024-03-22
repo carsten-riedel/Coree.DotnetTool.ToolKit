@@ -7,13 +7,12 @@
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <Company></Company>
-    <Copyright>Copyright © Carsten Riedel 2024</Copyright>
-    
+    <Copyright>Copyright © 2024 Carsten Riedel</Copyright>
     <PackageId>Coree.DotnetTool.ToolKit</PackageId>
-    <PackageTags>dotnet;tool</PackageTags>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
+    <PackageTags>dotnet;tool;coree</PackageTags>
+    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.DotnetTool.ToolKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/carsten-riedel/Coree.DotnetTool.ToolKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
     <VersionMajor>0</VersionMajor>
     <VersionMinor>1</VersionMinor>

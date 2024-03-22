@@ -47,11 +47,11 @@ namespace Coree.DotnetTool.ToolKit.Command
 
         public override async Task<int> ExecuteAsync(CommandContext context, OnBranchCopyDirectorySettings settings)
         {
-            Program.ExitCode = await ExecuteCancelAsync(Program.cancellationTokenSource.Token, settings);
+            Program.ExitCode = await ExecuteCancelAsync(settings,Program.cancellationTokenSource.Token);
             return Program.ExitCode;
         }
 
-        private async Task<int> ExecuteCancelAsync(CancellationToken cancellationToken, OnBranchCopyDirectorySettings settings)
+        private async Task<int> ExecuteCancelAsync(OnBranchCopyDirectorySettings settings,CancellationToken cancellationToken)
         {
             int x = 0;
             try
