@@ -6,7 +6,6 @@ using Coree.NETStandard.Services;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Serilog.Events;
-
 using Spectre.Console;
 using Spectre.Console.Cli;
 
