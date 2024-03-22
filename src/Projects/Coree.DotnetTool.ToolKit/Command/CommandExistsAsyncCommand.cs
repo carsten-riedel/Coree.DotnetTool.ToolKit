@@ -4,6 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Coree.NETStandard.Services;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
+using Serilog.Events;
+
 using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit.Command
@@ -12,11 +15,16 @@ namespace Coree.DotnetTool.ToolKit.Command
     {
         public sealed class CommandExistsSettings : CommandSettings
         {
-            [Description("")]
+            [Description("The shell commandline command e.g. cmd,curl,bash")]
             [CommandArgument(0, "<CommandName>")]
             public string? CommandName { get; init; }
 
-            [Description("")]
+            [Description("Minimum loglevel Verbose,Debug,Information,Warning,Error,Fatal")]
+            [DefaultValue(LogEventLevel.Information)]
+            [CommandOption("-l|--loglevel")]
+            public LogEventLevel LogEventLevel { get; init; }
+
+            [Description("Throws and errorcode if command is not found.")]
             [DefaultValue(false)]
             [CommandOption("-t|--throwError")]
             public bool ThrowError { get; init; }
@@ -25,15 +33,18 @@ namespace Coree.DotnetTool.ToolKit.Command
 
         private readonly ILogger<CommandExistsAsyncCommand> logger;
         private readonly IFileService fileService;
+        private readonly LoggingLevelSwitch loggingLevelSwitch;
 
-        public CommandExistsAsyncCommand(ILogger<CommandExistsAsyncCommand> logger,IFileService fileService)
+        public CommandExistsAsyncCommand(ILogger<CommandExistsAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, IFileService fileService)
         {
             this.logger = logger;
             this.fileService = fileService;
+            this.loggingLevelSwitch = loggingLevelSwitch;
         }
 
         public override async Task<int> ExecuteAsync(CommandContext context, CommandExistsSettings settings)
         {
+            loggingLevelSwitch.MinimumLevel = Serilog.Events.LogEventLevel.Information;
             Program.ExitCode = await ExecuteCancelAsync(Program.cancellationTokenSource.Token, settings);
             return Program.ExitCode;
         }

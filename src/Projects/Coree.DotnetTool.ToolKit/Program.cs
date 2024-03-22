@@ -7,12 +7,15 @@ using Coree.NETStandard.Logging;
 using Coree.NETStandard.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Core;
+
 using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit
 {
     public class Program
     {
+        public static LoggingLevelSwitch levelSwitch = new LoggingLevelSwitch();
         public static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         public static int ExitCode = -1;
 
@@ -36,7 +39,7 @@ namespace Coree.DotnetTool.ToolKit
                 configure.AddSerilog(new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.With(new SourceContextShortEnricher())
-                    .MinimumLevel.Verbose()
+                    .MinimumLevel.ControlledBy(levelSwitch)
                     .WriteTo.Console(outputTemplate: SerilogExtensions.SimpleOutputTemplate())
                     .CreateLogger()
                 )
@@ -44,6 +47,7 @@ namespace Coree.DotnetTool.ToolKit
 
             services.AddSingleton<ILoggingService, ConsoleLoggingService>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<LoggingLevelSwitch>(levelSwitch);
 
             var registrar = new TypeRegistrar(services);
 
@@ -53,7 +57,7 @@ namespace Coree.DotnetTool.ToolKit
             app.Configure(config =>
             {
                 config.SetApplicationName("toolkit");
-                config.AddCommand<CommandExistsAsyncCommand>("CommandExists");
+                config.AddCommand<CommandExistsAsyncCommand>("command-exists");
             });
 
             return await app.RunAsync(args);
