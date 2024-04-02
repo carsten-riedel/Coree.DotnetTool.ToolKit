@@ -1,64 +1,49 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+
 using Coree.DotnetTool.ToolKit.Command;
-using Coree.NETStandard.Extensions;
-using Coree.NETStandard.Logging;
+using Coree.NETStandard.CoreeHttpClient;
+using Coree.NETStandard.Serilog;
+using Coree.NETStandard.Services;
+using Coree.NETStandard.SpectreConsole;
+
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
 using Serilog;
 using Serilog.Core;
+
 using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit
 {
     public class Program
     {
-        internal static LoggingLevelSwitch levelSwitch = new LoggingLevelSwitch();
-        internal static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        internal static int ExitCode = -1;
-
-        public static async Task<int> Main(string[] args)
+        private static async Task Main(string[] args)
         {
-            Console.CancelKeyPress += (object? sender, ConsoleCancelEventArgs e) =>
-                {
-                    var isCtrlC = e.SpecialKey == ConsoleSpecialKey.ControlC;
-                    var isCtrlBreak = e.SpecialKey == ConsoleSpecialKey.ControlBreak;
+            var builder = Host.CreateDefaultBuilder(args);
 
-                    if (isCtrlC || isCtrlBreak)
-                    {
-                        cancellationTokenSource.Cancel();
-                        Environment.Exit(ExitCode);
-                    }
-                };
-
-            ServiceCollection services = new ServiceCollection();
-
-            services.AddLogging(configure =>
-                configure.AddSerilog(new LoggerConfiguration()
-                    .Enrich.FromLogContext()
-                    .Enrich.With(new SourceContextShortEnricher())
-                    .MinimumLevel.ControlledBy(levelSwitch)
-                    .WriteTo.Console(outputTemplate: SerilogExtensions.SimpleOutputTemplate())
-                    .CreateLogger()
-                )
-            );
-
-
-            services.AddSingleton<Coree.NETStandard.Services.IFileService, Coree.NETStandard.Services.FileService>();
-            services.AddSingleton<LoggingLevelSwitch>(levelSwitch);
-
-            var registrar = new Coree.NETStandard.TypeRegistrar(services);
-
-            // Create a new command app with the registrar
-            // and run it with the provided arguments.
-            var app = new CommandApp(registrar);
-            app.Configure(config =>
+            builder.ConfigureServices(service =>
             {
-                config.SetApplicationName("toolkit");
-                config.AddCommand<CommandExistsAsyncCommand>("command-exists");
+                service.AddCoreeHttpClient();
+                service.AddLoggingCoreeNETStandard();
+                service.AddSingleton<IFileService, FileService>();
+                service.AddSingleton<IProcessService, ProcessService>();
+
+                service.AddSpectreConsole(configureCommandApp =>
+                {
+                    configureCommandApp.SetApplicationName("toolkit");
+                    configureCommandApp.AddCommand<CommandExistsAsyncCommand>("command-exists").WithExample(new[] { "command-exists", "curl" }).WithExample(new[] { "command-exists", "foo", "-t", "-l Fatal" }); ;
+                    configureCommandApp.AddCommand<SetenvGitrootAsyncCommand>("setenv-gitroot");
+                    configureCommandApp.AddCommand<SetenvGitbranchAsyncCommand>("setenv-gitbranch");
+                    configureCommandApp.AddCommand<NugetDelistAsyncCommand>("nuget-delist");
+                    //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    //{
+                    //}
+                });
             });
 
-            return await app.RunAsync(args);
+            await builder.Build().RunAsync();
         }
     }
 }

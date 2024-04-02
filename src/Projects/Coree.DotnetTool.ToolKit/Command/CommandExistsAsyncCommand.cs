@@ -3,6 +3,9 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Coree.NETStandard.Services;
+using Coree.NETStandard.SpectreConsole;
+
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using Serilog.Events;
@@ -13,7 +16,7 @@ namespace Coree.DotnetTool.ToolKit.Command
 {
     public class CommandExistsAsyncCommand : AsyncCommand<CommandExistsAsyncCommand.CommandExistsSettings>
     {
-        public sealed class CommandExistsSettings : CommandSettings
+        public class CommandExistsSettings : CommandSettings
         {
             [Description("The shell commandline command e.g. cmd,curl,bash")]
             [CommandArgument(0, "<CommandName>")]
@@ -42,20 +45,22 @@ namespace Coree.DotnetTool.ToolKit.Command
         }
 
         private readonly ILogger<CommandExistsAsyncCommand> logger;
-        private readonly IFileService fileService;
         private readonly LoggingLevelSwitch loggingLevelSwitch;
+        private readonly IHostApplicationLifetime hostApplicationLifetime;
+        private readonly IFileService fileService;
 
-        public CommandExistsAsyncCommand(ILogger<CommandExistsAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, Coree.NETStandard.Services.IFileService fileService)
+        public CommandExistsAsyncCommand(ILogger<CommandExistsAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, IHostApplicationLifetime hostApplicationLifetime,IFileService fileService)
         {
             this.logger = logger;
-            this.fileService = fileService;
             this.loggingLevelSwitch = loggingLevelSwitch;
+            this.hostApplicationLifetime = hostApplicationLifetime;
+            this.fileService = fileService;
         }
 
         public override async Task<int> ExecuteAsync(CommandContext context, CommandExistsSettings settings)
         {
-            loggingLevelSwitch.MinimumLevel = Serilog.Events.LogEventLevel.Information;
-            return await ExecuteCancelAsync(settings, Program.cancellationTokenSource.Token);
+            loggingLevelSwitch.MinimumLevel = settings.LogEventLevel;
+            return await ExecuteCancelAsync(settings, hostApplicationLifetime.ApplicationStopping);
         }
 
         private async Task<int> ExecuteCancelAsync(CommandExistsSettings settings, CancellationToken cancellationToken)
@@ -71,23 +76,23 @@ namespace Coree.DotnetTool.ToolKit.Command
                 else if (foundat == null)
                 {
                     logger.LogError("Command {CommandName} not found.", settings.CommandName);
-                    return 0;
+                    return (int)SpectreConsoleHostedService.ExitCode.SuccessAndExit;
                 }
                 else
                 {
                     logger.LogInformation("Command {CommandName} found in {location}", System.IO.Path.GetFileName(foundat), foundat);
-                    return 0;
+                    return (int)SpectreConsoleHostedService.ExitCode.SuccessAndExit;
                 }
             }
             catch (OperationCanceledException ex)
             {
                 logger.LogError(ex, "OperationCanceledException");
-                return -99;
+                return (int)SpectreConsoleHostedService.ExitCode.CommandTerminated;
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Exception");
-                return -2;
+                return (int)SpectreConsoleHostedService.ExitCode.CommandFailedToRun;
             }
         }
     }
