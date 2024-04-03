@@ -33,10 +33,11 @@ namespace Coree.DotnetTool.ToolKit
                 service.AddSpectreConsole(configureCommandApp =>
                 {
                     configureCommandApp.SetApplicationName("toolkit");
-                    configureCommandApp.AddCommand<CommandExistsAsyncCommand>("command-exists").WithExample(new[] { "command-exists", "curl" }).WithExample(new[] { "command-exists", "foo", "-t", "-l Fatal" }); ;
+                    configureCommandApp.AddCommand<CommandExistsAsyncCommand>("command-exists").WithExample(new[] { "command-exists", "curl" }).WithExample(new[] { "command-exists", "foo", "-t", "-l Fatal" });
                     configureCommandApp.AddCommand<SetenvGitrootAsyncCommand>("setenv-gitroot");
                     configureCommandApp.AddCommand<SetenvGitbranchAsyncCommand>("setenv-gitbranch");
                     configureCommandApp.AddCommand<NugetDelistAsyncCommand>("nuget-delist");
+                    configureCommandApp.AddCommand<SelfUpdateAsyncCommand>("selfupdate").WithExample(new[] { "selfupdate" });
                     //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     //{
                     //}

@@ -6,6 +6,7 @@
   <!-- dotnet tool list -g -->
 
   <PropertyGroup>
+    <Pubparam>--nologo --verbosity:n --framework net6.0 -p:TargetFrameworks=net6.0 --self-contained true --runtime win-x64  --property:AssemblyName=toolkit --property:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:PublishSingleFile=true -p:PublishDir=bin\Publish</Pubparam>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -27,6 +28,7 @@
     <None Remove=".gitignore" />
     <None Remove="Command\CommandExistsAsyncCommand.cs" />
     <None Remove="Command\NugetDelistAsyncCommand.cs" />
+    <None Remove="Command\SelfUpdateAsyncCommand.cs" />
     <None Remove="Command\SetenvGitbranchAsyncCommand.cs" />
     <None Remove="Command\SetenvGitrootAsyncCommand.cs" />
     <None Remove="HelloAsyncCommand.cs" />
@@ -34,7 +36,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Coree.NETStandard" Version="0.1.8858.34332" />
+    <PackageReference Include="Coree.NETStandard" Version="0.1.8859.21172" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
