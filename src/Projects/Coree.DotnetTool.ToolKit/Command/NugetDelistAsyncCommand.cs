@@ -80,7 +80,6 @@ namespace Coree.DotnetTool.ToolKit.Command
                     return -99;
                 }
 
-
                 foreach (var item in listedPackages)
                 {
                     logger.LogInformation("{item} is listed", item.PadRight(15));

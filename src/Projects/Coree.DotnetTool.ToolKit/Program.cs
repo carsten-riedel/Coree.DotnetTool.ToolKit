@@ -26,7 +26,11 @@ namespace Coree.DotnetTool.ToolKit
             builder.ConfigureServices(service =>
             {
                 service.AddCoreeHttpClient();
-                service.AddLoggingCoreeNETStandard();
+                service.AddLoggingCoreeNETStandard(true,
+                    new System.Collections.Generic.Dictionary<string, Serilog.Events.LogEventLevel>() {
+                        { "System.Net.Http.HttpClient.CoreeHttpClient.LogicalHandler", Serilog.Events.LogEventLevel.Debug },
+                        { "System.Net.Http.HttpClient.CoreeHttpClient.ClientHandler", Serilog.Events.LogEventLevel.Debug }
+                    });
                 service.AddSingleton<IFileService, FileService>();
                 service.AddSingleton<IProcessService, ProcessService>();
 

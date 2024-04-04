@@ -36,7 +36,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Coree.NETStandard" Version="0.1.8859.21172" />
+    <PackageReference Include="Coree.NETStandard" Version="0.1.8860.40820" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
