@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Coree.NETStandard.Extensions.Strings;
 using Coree.NETStandard.Services;
+using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -73,16 +74,19 @@ namespace Coree.DotnetTool.ToolKit.Command
                     var firstResult = result.Output.SplitWith(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
                     logger.LogInformation("Outputs first line result is {output}.", firstResult);
                     Console.Write(@$"TOOLKIT_GITROOT={firstResult}{Environment.NewLine}");
+                    return (int)SpectreConsoleHostedService.ExitCode.SuccessAndExit;
                 }
 
                 if (result.ExitCodeState.HasFlag(ProcessRunExitCodeState.IsFailedStart))
                 {
                     logger.LogError("Failed to start the command '{CommandName}'. Ensure the command is installed and accessible.", result.Filename);
+                    return (int)SpectreConsoleHostedService.ExitCode.CommandFailedToRun;
                 }
 
                 if (result.ExitCodeState.HasFlag(ProcessRunExitCodeState.IsCanceledSet))
                 {
                     logger.LogWarning("Command execution '{CommandLine}' was canceled.", result.Commandline);
+                    return (int)SpectreConsoleHostedService.ExitCode.CommandTerminated;
                 }
 
                 if (result.ExitCodeState.HasFlag(ProcessRunExitCodeState.IsValidErrorCode))
