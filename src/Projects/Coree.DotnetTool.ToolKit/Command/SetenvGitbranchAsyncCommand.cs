@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +10,7 @@ using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using Serilog.Core;
 using Serilog.Events;
 

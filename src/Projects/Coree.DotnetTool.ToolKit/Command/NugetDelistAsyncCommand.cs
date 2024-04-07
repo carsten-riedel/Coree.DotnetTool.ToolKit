@@ -5,13 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Coree.NETStandard.CoreeHttpClient;
-using Coree.NETStandard.Services;
 using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using Serilog.Core;
 using Serilog.Events;
+
 using Spectre.Console;
 using Spectre.Console.Cli;
 
