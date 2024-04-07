@@ -1,4 +1,4 @@
-## `command-exists` Command Documentation
+## `command-exists` Documentation
 
 ### Overview
 The `command-exists` command checks for the availability of a specified shell command in the system's path. This is particularly useful for scripts and applications that rely on external command-line tools.
