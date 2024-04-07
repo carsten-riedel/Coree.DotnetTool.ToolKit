@@ -215,14 +215,8 @@ Ensure-VariableSet -VariableName "`$SECRETS_PAT" -VariableValue "$SECRETS_PAT"
 Ensure-VariableSet -VariableName "`$SECRETS_NUGET_PAT" -VariableValue "$SECRETS_NUGET_PAT"
 Ensure-VariableSet -VariableName "`$SECRETS_NUGET_TEST_PAT" -VariableValue "$SECRETS_NUGET_TEST_PAT"
 
-if (-not (Test-CommandAvailability -CommandName "docfx"))
-{
-    Log-Block -Stage "Prepare" -Section "Install" -Task "Installing dotnet tool docfx."
-    dotnet tool install --global docfx --version 2.74.1
-}
 
 Log-Block -Stage "Build" -Section "Clean" -Task "Clean output directorys"
-
 
 Clear-BinObjDirectories -sourceDirectory "src/Projects/Coree.DotnetTool.ToolKit"
 
@@ -232,18 +226,6 @@ Log-Block -Stage "Build" -Section "Build" -Task "Building the solution."
 dotnet build ./src --no-restore /p:ContinuousIntegrationBuild=true -c Release
 Log-Block -Stage "Build" -Section "Pack" -Task "Createing the nuget package."
 dotnet pack ./src --no-restore /p:ContinuousIntegrationBuild=true -c Release
-Log-Block -Stage "Build" -Section "Docfx" -Task "Generating the docfx files."
-docfx src/Projects/Coree.DotnetTool.ToolKit/Docfx/build/docfx_local.json
-
-Log-Block -Stage "Copy files" -Section "Docfx" -Task "Copying files from the docfx output to docs/docfx"
-Copy-Directory -sourceDir "src/Projects/Coree.DotnetTool.ToolKit/Docfx/result/local/" -destinationDir "docs/docfx" -exclusions @('.git', '.github')
-
-Log-Block -Stage "Commit and Push" -Section "Docfx" -Task "Commit and Push docs/docfx"
-git config --global user.name 'Updated form Workflow'
-git config --global user.email 'carstenriedel@outlook.com'
-git add docs/docfx
-git commit -m "Updated form Workflow"
-git push origin master
 
 Log-Block -Stage "Publish" -Section "Packages" -Task "dotnet nuget push github"
 $pattern = "src/Projects/Coree.DotnetTool.ToolKit/bin/Pack/Coree.DotnetTool.ToolKit.*.nupkg"
@@ -253,9 +235,8 @@ dotnet nuget push "$($firstFileMatch.FullName)" --api-key $SECRETS_PAT --source 
 Log-Block -Stage "Publish" -Section "Packages" -Task "dotnet nuget push nuget"
 dotnet nuget push "$($firstFileMatch.FullName)" --api-key $SECRETS_NUGET_PAT --source https://api.nuget.org/v3/index.json
 
-Log-Block -Stage "Call" -Section "Dispatch" -Task "dispatching a other job"
-curl -X POST -H "Authorization: token $SECRETS_PAT" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/carsten-riedel/Coree.DotnetTool.ToolKit/dispatches -d '{"event_type": "trigger-other-workflow"}'
-
+# Log-Block -Stage "Call" -Section "Dispatch" -Task "dispatching a other job"
+# curl -X POST -H "Authorization: token $SECRETS_PAT" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/carsten-riedel/Coree.DotnetTool.ToolKit/dispatches -d '{"event_type": "trigger-other-workflow"}'
 
 Log-Block -Stage "Cleanup" -Section "Packages" -Task "clean old github packages"
 $headers = @{
