@@ -220,12 +220,16 @@ Log-Block -Stage "Build" -Section "Clean" -Task "Clean output directorys"
 
 Clear-BinObjDirectories -sourceDirectory "src/Projects/Coree.DotnetTool.ToolKit"
 
+# dotnet Stage
 Log-Block -Stage "Build" -Section "Restore" -Task "Restoreing nuget packages."
 dotnet restore ./src
 Log-Block -Stage "Build" -Section "Build" -Task "Building the solution."
 dotnet build ./src --no-restore /p:ContinuousIntegrationBuild=true -c Release
 Log-Block -Stage "Build" -Section "Pack" -Task "Createing the nuget package."
 dotnet pack ./src --no-restore /p:ContinuousIntegrationBuild=true -c Release
+Log-Block -Stage "Build" -Section "Pack" -Task "Createing the nuget package."
+dotnet publish ./src --nologo --verbosity:n --framework net6.0 -p:TargetFrameworks=net6.0 --self-contained true --runtime win-x64  --property:AssemblyName=toolkit --property:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:PublishSingleFile=true -p:PublishDir=bin\Publish
+
 
 Log-Block -Stage "Publish" -Section "Packages" -Task "dotnet nuget push github"
 $pattern = "src/Projects/Coree.DotnetTool.ToolKit/bin/Pack/Coree.DotnetTool.ToolKit.*.nupkg"
