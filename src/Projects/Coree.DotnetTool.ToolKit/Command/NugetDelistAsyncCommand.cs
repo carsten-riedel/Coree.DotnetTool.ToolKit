@@ -71,6 +71,8 @@ namespace Coree.DotnetTool.ToolKit.Command
             try
             {
                 var RegistrationsBaseUrls = await coreeHttpClient.GetJsonPathResultAsync<string>($"https://api.nuget.org/v3/index.json", "$.resources[?(@['@type'] == 'RegistrationsBaseUrl/3.6.0')]..['@id']", null, TimeSpan.FromHours(24 * 30),cancellationToken: cancellationToken);
+
+                var url = $"{RegistrationsBaseUrls?.First()}{settings.PackageName.ToLowerInvariant()}/index.json";
                 var listedPackages = await coreeHttpClient.GetJsonPathResultAsync<string>($"{RegistrationsBaseUrls?.First()}{settings.PackageName.ToLowerInvariant()}/index.json", "$.items[*].items[*][?(@.listed == true)].version", cancellationToken: cancellationToken);
                 var unlistedPackages = await coreeHttpClient.GetJsonPathResultAsync<string>($"{RegistrationsBaseUrls?.First()}{settings.PackageName.ToLowerInvariant()}/index.json", "$.items[*].items[*][?(@.listed == false)].version", cancellationToken: cancellationToken);
 
