@@ -1,4 +1,4 @@
-## `command-exists` Documentation
+## Documentation `command-exists` 
 
 ### Overview
 The `command-exists` command checks for the availability of a specified shell command in the system's path. This is particularly useful for scripts and applications that rely on external command-line tools.
@@ -22,9 +22,19 @@ Check if `curl` is available on the system, with the log level set to `Debug`:
 
 ```
 toolkit command-exists curl --loglevel Verbose
+>> 09:41:51.1080 | DBG | File            | The PATH contains a directory entry C:\actions-runner that do not exist, skipping.
+....
+
 toolkit command-exists curl
+>> 09:43:29.2217 | INF | CommandExists   | Command curl.exe found in C:\Windows\System32\curl.exe
+
 toolkit command-exists unknowncmd
+>> 09:43:57.9924 | ERR | CommandExists   | Command unknowncmd not found.
+
 toolkit command-exists unknowncmd -t
+>> 09:44:18.7168 | ERR | CommandExists   | Command unknowncmd not found. Throwing error exitcode.
+
+//No output from this command just throws error code.
 toolkit command-exists unknowncmd -t -l Fatal
 ```
 
@@ -42,5 +52,3 @@ Use the `-h` switch for command-line help:
 ```
 toolkit command-exists -h
 ```
-
-This documentation provides a quick overview and practical examples to help users get started with the `command-exists` command.
