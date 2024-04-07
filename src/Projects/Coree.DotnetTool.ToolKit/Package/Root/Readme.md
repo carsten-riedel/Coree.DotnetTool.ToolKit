@@ -20,3 +20,17 @@ Install/Update/Reinstall
 dotnet tool install -g Coree.DotnetTool.ToolKit
 ```
 
+Use
+```
+toolkit -h
+```
+
+## Documentation
+
+For detailed information about each command and feature, our documentation is hosted on GitHub Pages. Navigate through the Command Menu at the top of the documentation page to browse available commands and learn more about their uses and options.
+
+The toolkit is built using Spectre.Console, providing a rich CLI experience, and standard help is available with the -h switch.
+
+[Documentation github Pages](https://carsten-riedel.github.io/Coree.DotnetTool.ToolKit)
+
+

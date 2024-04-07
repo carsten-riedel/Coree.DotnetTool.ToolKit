@@ -26,7 +26,7 @@
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
 
     <Description>
-     <![CDATA[Coree.DotnetTool.ToolKit is a multi-purpose command-line .NET tool, containing a suite of helper functionalities designed for application development, CI/CD processes, and NuGet package management. It's crafted to streamline various tasks and enhance productivity across .NET projects.]]>
+     <![CDATA[Coree.DotnetTool.ToolKit is a multi-purpose command-line .NET tool, containing a suite of helper functionalities designed for application development, CI/CD processes, and NuGet package management.]]>
     </Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
