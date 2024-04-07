@@ -5,8 +5,6 @@
 
 Coree.DotnetTool.ToolKit is a multi-purpose command-line .NET tool, containing a suite of helper functionalities designed for application development, CI/CD processes, and NuGet package management. It's crafted to streamline various tasks and enhance productivity across .NET projects.
 
-
-
 ## Prerequisites
 
 - .NET SDK: Ensure you have the .NET SDK installed on your machine. If not, download and install it from [the official .NET website](https://dotnet.microsoft.com/download).
@@ -24,7 +22,6 @@ Use
 ```
 toolkit -h
 ```
-
 
 ## Documentation
 
