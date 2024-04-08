@@ -12,10 +12,6 @@ using Coree.NETStandard.SpectreConsole;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using NuGet.Common;
-using NuGet.Protocol;
-using NuGet.Protocol.Core.Types;
-
 using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit
