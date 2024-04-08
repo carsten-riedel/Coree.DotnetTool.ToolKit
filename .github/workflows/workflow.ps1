@@ -237,7 +237,7 @@ $firstFileMatch = Get-ChildItem -Path $pattern -File | Select-Object -First 1
 dotnet nuget add source --username carsten-riedel --password $SECRETS_PAT --store-password-in-clear-text --name github "https://nuget.pkg.github.com/carsten-riedel/index.json"
 dotnet nuget push "$($firstFileMatch.FullName)" --api-key $SECRETS_PAT --source "github"
 Log-Block -Stage "Publish" -Section "Packages" -Task "dotnet nuget push nuget"
-dotnet nuget push "$($firstFileMatch.FullName)" --api-key $SECRETS_NUGET_PAT --source https://api.nuget.org/v3/index.json
+dotnet nuget push "$($firstFileMatch.FullName)" --api-key $SECRETS_NUGET_TEST_PAT --source https://apiint.nugettest.org/v3/index.json
 
 # Log-Block -Stage "Call" -Section "Dispatch" -Task "dispatching a other job"
 # curl -X POST -H "Authorization: token $SECRETS_PAT" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/carsten-riedel/Coree.DotnetTool.ToolKit/dispatches -d '{"event_type": "trigger-other-workflow"}'

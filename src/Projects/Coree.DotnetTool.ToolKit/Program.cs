@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Coree.DotnetTool.ToolKit.Command;
 using Coree.NETStandard.CoreeHttpClient;
@@ -9,6 +12,10 @@ using Coree.NETStandard.SpectreConsole;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using NuGet.Common;
+using NuGet.Protocol;
+using NuGet.Protocol.Core.Types;
+
 using Spectre.Console.Cli;
 
 namespace Coree.DotnetTool.ToolKit
@@ -17,6 +24,21 @@ namespace Coree.DotnetTool.ToolKit
     {
         private static async Task Main(string[] args)
         {
+            //NuGet.Protocol
+            //SourceRepository repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
+
+            //PackageSearchResource resource = await repository.GetResourceAsync<PackageSearchResource>();
+            //SearchFilter searchFilter = new SearchFilter(includePrerelease: true, filter: SearchFilterType.IsAbsoluteLatestVersion);
+
+            //IEnumerable<IPackageSearchMetadata> results = await resource.SearchAsync(
+            //    "Coree.NETStandard",
+            //    searchFilter,
+            //    skip: 0,
+            //    take: 100,
+            //    NullLogger.Instance,
+            //    CancellationToken.None);
+
+
             var builder = Host.CreateDefaultBuilder(args);
 
             builder.ConfigureServices(service =>
