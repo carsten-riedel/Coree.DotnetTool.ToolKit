@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Coree.NETStandard.Services;
+using Coree.NETStandard.Services.File;
 using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.Hosting;

@@ -7,6 +7,7 @@ using Coree.DotnetTool.ToolKit.Command;
 using Coree.NETStandard.CoreeHttpClient;
 using Coree.NETStandard.Serilog;
 using Coree.NETStandard.Services;
+using Coree.NETStandard.Services.File;
 using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.DependencyInjection;

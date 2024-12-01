@@ -36,13 +36,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Coree.NETStandard" Version="0.1.8860.40820" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
-    <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-    <PackageReference Include="Spectre.Console" Version="0.48.0" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.48.0" />
+    <PackageReference Include="Coree.NETStandard" Version="0.1.8863.39553" />
   </ItemGroup>
   
   <ItemGroup>
