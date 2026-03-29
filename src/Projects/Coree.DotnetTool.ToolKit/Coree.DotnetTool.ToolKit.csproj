@@ -36,7 +36,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Coree.NETStandard" Version="0.1.9584.34432" />
+    <PackageReference Include="Coree.NETStandard" Version="0.1.9584.36047" />
   </ItemGroup>
   
   <ItemGroup>
