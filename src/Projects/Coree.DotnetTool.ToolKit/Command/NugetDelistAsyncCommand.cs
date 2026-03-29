@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Coree.NETStandard.CoreeHttpClient;
+using Coree.NETStandard.Classes.HttpRequestService;
+using Coree.NETStandard.Extensions.Conversions.String;
 using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.Hosting;
@@ -51,14 +53,14 @@ namespace Coree.DotnetTool.ToolKit.Command
         private readonly ILogger<NugetDelistAsyncCommand> logger;
         private readonly LoggingLevelSwitch loggingLevelSwitch;
         private readonly IHostApplicationLifetime hostApplicationLifetime;
-        private readonly ICoreeHttpClient coreeHttpClient;
+        private readonly HttpRequestService httpRequestService;
 
-        public NugetDelistAsyncCommand(ILogger<NugetDelistAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, IHostApplicationLifetime hostApplicationLifetime, ICoreeHttpClient coreeHttpClient)
+        public NugetDelistAsyncCommand(ILogger<NugetDelistAsyncCommand> logger, LoggingLevelSwitch loggingLevelSwitch, IHostApplicationLifetime hostApplicationLifetime, HttpRequestService httpRequestService)
         {
             this.logger = logger;
             this.loggingLevelSwitch = loggingLevelSwitch;
             this.hostApplicationLifetime = hostApplicationLifetime;
-            this.coreeHttpClient = coreeHttpClient;
+            this.httpRequestService = httpRequestService;
         }
 
         public override async Task<int> ExecuteAsync(CommandContext context, NugetDelistSettings settings)
@@ -71,11 +73,20 @@ namespace Coree.DotnetTool.ToolKit.Command
         {
             try
             {
-                var RegistrationsBaseUrls = await coreeHttpClient.GetJsonPathResultAsync<string>($"https://api.nuget.org/v3/index.json", "$.resources[?(@['@type'] == 'RegistrationsBaseUrl/3.6.0')]..['@id']", null, TimeSpan.FromHours(24 * 30),cancellationToken: cancellationToken);
+                var serviceIndex = await httpRequestService.CreateRequest(HttpMethod.Get, new Uri("https://api.nuget.org/v3/index.json"), cacheDuration: TimeSpan.FromHours(24 * 30), cancellationToken: cancellationToken);
+                var registrationsBaseUrls = serviceIndex.ResponseString?.ToJsonPathResultValues<string>("$.resources[?(@['@type'] == 'RegistrationsBaseUrl/3.6.0')]..['@id']");
+                var registrationsBaseUrl = registrationsBaseUrls?.FirstOrDefault();
+                var packageIndexUrl = registrationsBaseUrl == null ? null : $"{registrationsBaseUrl}{settings.PackageName!.ToLowerInvariant()}/index.json";
 
-                var url = $"{RegistrationsBaseUrls?.First()}{settings.PackageName.ToLowerInvariant()}/index.json";
-                var listedPackages = await coreeHttpClient.GetJsonPathResultAsync<string>($"{RegistrationsBaseUrls?.First()}{settings.PackageName.ToLowerInvariant()}/index.json", "$.items[*].items[*][?(@.listed == true)].version", cancellationToken: cancellationToken);
-                var unlistedPackages = await coreeHttpClient.GetJsonPathResultAsync<string>($"{RegistrationsBaseUrls?.First()}{settings.PackageName.ToLowerInvariant()}/index.json", "$.items[*].items[*][?(@.listed == false)].version", cancellationToken: cancellationToken);
+                string? packageIndexJson = null;
+                if (!String.IsNullOrWhiteSpace(packageIndexUrl))
+                {
+                    var packageIndex = await httpRequestService.CreateRequest(HttpMethod.Get, new Uri(packageIndexUrl), cancellationToken: cancellationToken);
+                    packageIndexJson = packageIndex.ResponseString;
+                }
+
+                var listedPackages = packageIndexJson?.ToJsonPathResultValues<string>("$.items[*].items[*][?(@.listed == true)].version");
+                var unlistedPackages = packageIndexJson?.ToJsonPathResultValues<string>("$.items[*].items[*][?(@.listed == false)].version");
 
                 if (listedPackages == null || unlistedPackages == null)
                 {

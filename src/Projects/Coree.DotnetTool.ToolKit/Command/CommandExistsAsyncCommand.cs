@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Coree.NETStandard.Services;
-using Coree.NETStandard.Services.File;
+using Coree.NETStandard.Services.FileManagement;
+using Coree.NETStandard.Services.ProcessManagement;
 using Coree.NETStandard.SpectreConsole;
 
 using Microsoft.Extensions.Hosting;
@@ -68,7 +68,7 @@ namespace Coree.DotnetTool.ToolKit.Command
         {
             try
             {
-                var foundat = await fileService.IsCommandAvailableAsync(settings.CommandName, cancellationToken);
+                var foundat = fileService.IsCommandAvailable(settings.CommandName);
                 if (settings.ThrowError && foundat == null)
                 {
                     logger.LogError("Command {CommandName} not found. Throwing error exitcode.", settings.CommandName);

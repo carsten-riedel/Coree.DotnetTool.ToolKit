@@ -4,11 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Coree.DotnetTool.ToolKit.Command;
-using Coree.NETStandard.CoreeHttpClient;
+using Coree.NETStandard.Classes.HttpRequestService;
 using Coree.NETStandard.Serilog;
-using Coree.NETStandard.Services;
-using Coree.NETStandard.Services.File;
 using Coree.NETStandard.SpectreConsole;
+using Coree.NETStandard.Services.FileManagement;
+using Coree.NETStandard.Services.ProcessManagement;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,7 +40,7 @@ namespace Coree.DotnetTool.ToolKit
 
             builder.ConfigureServices(service =>
             {
-                service.AddCoreeHttpClient();
+                service.AddHttpRequestService();
                 service.AddLoggingCoreeNETStandard(true,
                     new System.Collections.Generic.Dictionary<string, Serilog.Events.LogEventLevel>() {
                         { "System.Net.Http.HttpClient.CoreeHttpClient.LogicalHandler", Serilog.Events.LogEventLevel.Debug },
