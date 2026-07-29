@@ -1,3 +1,11 @@
+param (
+    [string]$PAT,
+    [Alias("NUGET_PAT")]
+    [string]$SECRET_NUGET_APIKEY,
+    [Alias("NUGET_TEST_PAT")]
+    [string]$SECRET_INTTESTNUGET_APIKEY
+)
+
 $ErrorActionPreference = 'Stop'
 
 # Custom function to copy files, excluding specified directories
@@ -200,9 +208,9 @@ Write-Output ("Name: {0} Value: {1}" -f "`$gitBranch".PadRight(20), $gitBranch )
 Write-Output ("Name: {0} Value: {1}" -f "GetLocation".PadRight(20), $(Get-Location) )
 
 Log-Block -Stage "Prepare" -Section "Secrets" -Task "Import or commandline"
-$SECRETS_PAT = $args[0]
-$SECRETS_NUGET_PAT = $args[1]
-$SECRETS_NUGET_TEST_PAT = $args[2]
+$SECRETS_PAT = $PAT
+$SECRETS_NUGET_PAT = $SECRET_NUGET_APIKEY
+$SECRETS_NUGET_TEST_PAT = $SECRET_INTTESTNUGET_APIKEY
 
 $secretsPath = ".github/workflows/secrets.ps1"
 
